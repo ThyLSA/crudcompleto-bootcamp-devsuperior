@@ -24,4 +24,10 @@ public class ClientService implements Serializable{
 		List<Client> list = repository.findAll();
 		return list.stream().map(x -> new ClientDTO(x)).collect(Collectors.toList());
 	}
+	
+	@Transactional(readOnly = true)
+	public ClientDTO findbyId(Long id) {
+		Client entity = repository.findById(id).get();
+		return new ClientDTO(entity);
+	}
 }
