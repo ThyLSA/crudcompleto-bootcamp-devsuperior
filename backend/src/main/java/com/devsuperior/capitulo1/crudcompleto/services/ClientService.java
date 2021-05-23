@@ -42,22 +42,27 @@ public class ClientService implements Serializable{
 	
 	@Transactional
 	public ClientDTO insert(ClientDTO client) {
-		Client entity = setAttributes(client);
+		Client entity = new Client();
+		setAttributes(entity, client);
 		return new ClientDTO(repository.save(entity));
 	}
 	
-	public ClientDTO update(ClientDTO client) {
-		Client entity = repository.getOne(client.getId());
-		return null;
+	@Transactional
+	public ClientDTO update(Long id, ClientDTO client) {
+		Client entity = repository.getOne(id);
+		setAttributes(entity, client);
+		return new ClientDTO(repository.save(entity));
 	}
 	
-	private Client setAttributes(ClientDTO dto) {
-		Client entity = new Client();
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
+	
+	private void setAttributes(Client entity, ClientDTO dto) {
 		entity.setName(dto.getName());
 		entity.setCpf(dto.getCpf());
 		entity.setBirthDate(dto.getBirthDate());
 		entity.setChildren(dto.getChildren());
 		entity.setIncome(dto.getIncome());
-		return entity;
 	}
 }
